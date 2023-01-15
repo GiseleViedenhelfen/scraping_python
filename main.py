@@ -1,5 +1,6 @@
 import requests
 from parsel import Selector
+from pymongo import MongoClient
 
 
 def fetch_content(url):
@@ -46,4 +47,10 @@ def pagination(url):
 
 url = 'http://books.toscrape.com/catalogue/'
 call_scraping_function = pagination(url)
-print(call_scraping_function)
+
+client = MongoClient("172.17.0.2:27017")
+db = client.catalogue
+book = call_scraping_function
+db.books.insert_many(book)
+print(book)
+client.close()
